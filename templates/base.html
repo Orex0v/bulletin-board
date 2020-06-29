@@ -1,0 +1,21 @@
+{% load advertisements_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Avito v2</title>
+</head>
+<body>
+<div>
+    <p>Поиск</p>
+    <form action="{% url 'search_results' %}" method="get">
+        <input name="q" type="text" placeholder="Search...">
+        <input name="category" type="hidden" value="{{ request.path.category }}">
+    <input type="submit">
+</form>
+</div>
+    {% block content %}
+    {% endblock %}
+{% get_category_list %}
+</body>
+</html>
