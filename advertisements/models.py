@@ -26,7 +26,7 @@ class City(models.Model):
 class Ad(models.Model):
     """Модель обьявления о продаже"""
     title = models.CharField('Заголовок', max_length=100, null=False)
-    description = models.TextField('Описание')
+    description = models.TextField('Описание', null=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор')
     image = models.ImageField('Фото', upload_to='images/', null=True)
     category = models.ForeignKey(Category, verbose_name="Категория", on_delete=models.SET_NULL, null=True)

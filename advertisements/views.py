@@ -1,8 +1,9 @@
 from django.db.models import Q
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.shortcuts import render
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView
 
+from .forms import AddPost
 from .models import Ad
 
 
@@ -12,10 +13,21 @@ class AdList(ListView):
 
     def get_queryset(self):
         if self.kwargs.get('category'):
-            object_list = Ad.objects.filter(moderated=True, category__slug=self.kwargs.get('category'))
+            object_list = self.model.objects.filter(moderated=True, category__slug=self.kwargs.get('category'))
         else:
-            object_list = Ad.objects.filter(moderated=True)
+            print(self.request)
+            object_list = self.model.objects.filter(moderated=True)
         return object_list
+
+
+# Надо доработать, похоже на копирование кода
+class UserAdList(ListView):
+    model = Ad
+    template_name = 'ad/post_list.html'
+
+    def get_queryset(self):
+        queryset = self.model.objects.filter(author=self.request.user)
+        return queryset
 
 
 class AdDetail(DetailView):
@@ -35,3 +47,28 @@ class SearchResultsView(ListView):
             moderated=True
         )
         return object_list
+
+
+class NewPostView(CreateView):
+    model = Ad
+    form_class = AddPost
+    template_name = 'ad/add_post.html'
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super(NewPostView, self).form_valid(form)
+
+class EditPost(UpdateView):
+    model = Ad
+    fields = ['title', 'description', 'image', 'category', 'city', 'price']
+    template_name = 'ad/add_post.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        obj = self.get_object()
+        if obj.author != self.request.user:
+            raise Http404("Нет прав для редактирования")
+        return super(EditPost, self).dispatch(request, *args, **kwargs)
+
+
+
+

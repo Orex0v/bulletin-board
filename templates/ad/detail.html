@@ -2,4 +2,7 @@
 {% block content %}
 DetailView
 {{ object.title }}
+{% if request.user == object.author %}
+<a href="{% url 'edit_post' object.id %}">Редактировать </a>
+{%endif%}
 {% endblock %}
