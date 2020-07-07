@@ -1,18 +1,23 @@
 {% extends 'base.html' %}
-{% load static %}
+{% load static  thumbnail%}
 {% block content %}
+    {% include 'base/search_block.html' %}
 <section class="featured section-padding">
 <div class="container">
+    {% if object_list %}
 <h1 class="section-title">Новые обьявления</h1>
+    {% else %}
+    <h1 class="section-title">Нет обьявлений</h1>
+    {% endif %}
+
 <div class="row">
 {% for post in object_list %}
 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
  <div class="featured-box">
  <figure>
-
-   <a href="#"><img class="img-fluid" src="{% static 'img/featured/img-1.jpg' %}" alt=""></a>
+   <a href="#"><img class="img-fluid img-prew" src="{{ post.image|thumbnail_url:'ad_preview' }}" alt=""></a>
  </figure>
-<div class="feature-content">
+<div class="feature-content featured-box">
 <div class="product">
 <a href="#">{{ post.category }}</a>
 </div>
@@ -24,9 +29,6 @@
 <span>
 <a href="#"><i class="lni-map-marker"></i>{{ post.city }}</a>
 </span>
-<!--<span>-->
-<!--<a href="#"><i class="lni-tag"></i> Canon</a>-->
-<!--</span>-->
 </div>
 <p class="dsc">{{ post.description }}</p>
 <div class="listing-bottom">
@@ -39,10 +41,10 @@
 {% endfor %}
 
 </div>
+{% if is_paginated %}
+  {% include "ad/pagination.html" %}
+{% endif %}
+
 </div>
 </section>
-{% for post in object_list %}
- <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
-{{ post.author }}
-{% endfor %}
 {% endblock %}

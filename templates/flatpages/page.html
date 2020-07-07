@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="page-header" style="background: url({% static 'img/banner1.jpg' %});">
+<div class="container">
+<div class="row">
+<div class="col-md-12">
+<div class="breadcrumb-wrapper">
+<h2 class="product-title">{{ flatpage.title }}</h2>
+<ol class="breadcrumb">
+<li><a href="{% url 'home' %}">Главная /</a></li>
+<li class="current">{{ flatpage.title }}</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section  class="section-padding">
+<div class="container">
+<div class="row">
+<div class="col-md-6 col-lg-6 col-xs-12">
+<div class="about-wrapper">
+<h2 class="intro-title">{{ flatpage.title }}</h2>
+<p class="intro-desc">{{ flatpage.content }}</p>
+</div>
+</div>
+<div class="col-md-6 col-lg-6 col-xs-12">
+<img class="img-fluid" src="assets/img/about/about.png" alt="">
+</div>
+</div>
+</div>
+</section>
+{% endblock %}

@@ -7,40 +7,56 @@
 
 {% block content %}
 
-<h1>{% trans "Sign In" %}</h1>
 
-{% get_providers as socialaccount_providers %}
 
-{% if socialaccount_providers %}
-<p>{% blocktrans with site.name as site_name %}Please sign in with one
-of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
-for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
-
-<div class="socialaccount_ballot">
-
-  <ul class="socialaccount_providers">
-    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
-  </ul>
-
-  <div class="login-or">{% trans 'or' %}</div>
-
-</div>
-
-{% include "socialaccount/snippets/login_extra.html" %}
-
-{% else %}
-<p>{% blocktrans %}If you have not created an account yet, then please
-<a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+<section class="login section-padding">
+<div class="container">
+<div class="row justify-content-center">
+  <div class="login-form login-area">
+    <h3>
+      Вход
+    </h3>
+    <form role="form" method="post" class="login-form" action="{% url 'account_login' %}">
+      {% csrf_token %}
+      <div class="form-group">
+        <div class="input-icon">
+          <i class="lni-user"></i>
+          <input type="text"class="form-control"  name="login" placeholder="Логин" autofocus="autofocus" maxlength="150" required="" id="id_login">
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="input-icon">
+          <i class="lni-lock"></i>
+          <input type="password" class="form-control" name="password" placeholder="Пароль" required="" id="id_password">
+        </div>
+      </div>
+      <div class="form-group mb-3">
+        <div class="custom-control custom-checkbox">
+            <input type="checkbox"  class="custom-control-input" name="remember" id="id_remember">
+          <label class="custom-control-label" for="id_remember">Запомнить меня</label>
+        </div>
+        <a class="forgetpassword" href="{% url 'account_reset_password' %}">Forgot Password?</a>
+      </div>
+      <div class="text-center">
+        <button class="btn btn-common log-btn" type="submit" >Submit</button>
+      </div>
+    </form>
+{% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
 {% endif %}
-
-<form class="login" method="POST" action="{% url 'account_login' %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  {% endif %}
-  <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
-  <button class="primaryAction" type="submit">{% trans "Sign In" %}</button>
-</form>
-
+  </div>
+</div>
+</div>
+</section>
 {% endblock %}

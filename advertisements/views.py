@@ -1,6 +1,6 @@
 from django.db.models import Q
 from django.http import HttpResponse, Http404
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView
 
 from .forms import AddPost
@@ -10,13 +10,13 @@ from .models import Ad
 class AdList(ListView):
     model = Ad
     template_name = 'ad/post_list.html'
+    paginate_by = 6
 
     def get_queryset(self):
         if self.kwargs.get('category'):
-            object_list = self.model.objects.filter(moderated=True, category__slug=self.kwargs.get('category'))
+            object_list = self.model.objects.filter(moderated=True, category__slug=self.kwargs.get('category'), status=False)
         else:
-            print(self.request)
-            object_list = self.model.objects.filter(moderated=True)
+            object_list = self.model.objects.filter(moderated=True, status=False)
         return object_list
 
 
@@ -24,6 +24,7 @@ class AdList(ListView):
 class UserAdList(ListView):
     model = Ad
     template_name = 'ad/post_list.html'
+    paginate_by = 6
 
     def get_queryset(self):
         queryset = self.model.objects.filter(author=self.request.user)
@@ -44,7 +45,7 @@ class SearchResultsView(ListView):
         query = self.request.GET.get('q')
         object_list = Ad.objects.filter(
             Q(title__icontains=query) | Q(description__icontains=query),
-            moderated=True
+            moderated=True, status=False
         )
         return object_list
 
@@ -54,13 +55,19 @@ class NewPostView(CreateView):
     form_class = AddPost
     template_name = 'ad/add_post.html'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('account_login')
+        return super(NewPostView, self).dispatch(request, *args, **kwargs)
+
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super(NewPostView, self).form_valid(form)
 
+
 class EditPost(UpdateView):
     model = Ad
-    fields = ['title', 'description', 'image', 'category', 'city', 'price']
+    form_class = AddPost
     template_name = 'ad/add_post.html'
 
     def dispatch(self, request, *args, **kwargs):
@@ -68,7 +75,3 @@ class EditPost(UpdateView):
         if obj.author != self.request.user:
             raise Http404("Нет прав для редактирования")
         return super(EditPost, self).dispatch(request, *args, **kwargs)
-
-
-
-

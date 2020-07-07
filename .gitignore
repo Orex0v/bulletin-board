@@ -2,7 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
-
+bullerin_board_venv/
 # C extensions
 *.so
 

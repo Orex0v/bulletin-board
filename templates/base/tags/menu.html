@@ -1,0 +1,91 @@
+{% load static mptt_tags %}
+<nav class="navbar navbar-expand-lg bg-white fixed-top scrolling-navbar">
+<div class="container">
+
+ <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
+  <span class="navbar-toggler-icon"></span>
+  <span class="lni-menu"></span>
+  <span class="lni-menu"></span>
+  <span class="lni-menu"></span>
+ </button>
+ <a href="{% url 'home' %}" class="navbar-brand"><img src="{% static 'img/logo.png' %}" alt=""></a>
+ <div class="collapse navbar-collapse" id="main-navbar">
+<ul class="navbar-nav mr-auto w-100 justify-content-center">
+<li class="nav-item ">
+<a class="nav-link " href="{% url 'home' %}"  aria-haspopup="true" aria-expanded="true">
+Главная
+</a>
+</li>
+
+      {% recursetree items %}
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="{{ node.get_absolute_url }}" aria-haspopup="true" aria-expanded="false">
+                {{ node.title }}
+            </a>
+            {% if not node.is_leaf_node %}
+            <div class="dropdown-menu">
+                {% for children in node.get_descendants %}
+        <a class="dropdown-item" href="{{ children.get_absolute_url }}">{{ children.title }}</a>
+                {% endfor %}
+        </li>
+            {% endif %}
+        </li>
+    {% endrecursetree %}
+</ul>
+<div class="post-btn">
+<a class="btn btn-common" href="{% url 'additem' %}"><i class="lni-pencil-alt"></i>Добавить обьявление</a>
+</div>
+</div>
+</div>
+
+<ul class="mobile-menu">
+<li>
+<a class="active" href="#">
+Home
+</a>
+<ul class="dropdown">
+<li><a class="active" href="index-2.html">Home 1</a></li>
+<li><a href="index-3.html">Home 2</a></li>
+</ul>
+</li>
+<li>
+<a href="category.html">Categories</a>
+</li>
+<li>
+<a href="#">
+Listings
+</a>
+<ul class="dropdown">
+<li><a href="adlistinggrid.html">Ad Grid</a></li>
+<li><a href="adlistinglist.html">Ad Listing</a></li>
+<li><a href="ads-details.html">Listing Detail</a></li>
+</ul>
+</li>
+<li>
+<a href="#">Pages</a>
+<ul class="dropdown">
+<li><a href="about.html">About Us</a></li>
+<li><a href="services.html">Services</a></li>
+<li><a href="ads-details.html">Ads Details</a></li>
+<li><a href="post-ads.html">Ads Post</a></li>
+<li><a href="pricing.html">Packages</a></li>
+<li><a href="testimonial.html">Testimonial</a></li>
+<li><a href="faq.html">FAQ</a></li>
+<li><a href="404.html">404</a></li>
+</ul>
+</li>
+<li>
+<a href="#">Blog</a>
+<ul class="dropdown">
+<li><a href="blog.html">Blog - Right Sidebar</a></li>
+<li><a href="blog-left-sidebar.html">Blog - Left Sidebar</a></li>
+<li><a href="blog-grid-full-width.html"> Blog full width </a></li>
+<li><a href="single-post.html">Blog Details</a></li>
+</ul>
+</li>
+<li>
+<a href="contact.html">Contact Us</a>
+</li>
+</ul>
+
+</nav>
