@@ -1,0 +1,10 @@
+.img-prew{
+    object-fit: scale-down;
+    min-height: 225px;
+
+}
+.img-detail{
+    object-fit: scale-down;
+    min-height: 450px;
+
+}

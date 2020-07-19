@@ -1,12 +1,14 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.urls import reverse
+from mptt.models import MPTTModel, TreeForeignKey
 from autoslug import AutoSlugField
 
 
-class Category(models.Model):
+class Category(MPTTModel):
     title = models.CharField('Название категории', max_length=50, null=False)
     slug = models.SlugField('Ссылка на категорию', max_length=50)
+    parent = TreeForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='Подкатегория')
 
     def get_absolute_url(self):
         return reverse("category_post_list", kwargs={'category': self.slug})
@@ -33,11 +35,20 @@ class Ad(models.Model):
     city = models.ForeignKey(City, on_delete=models.SET_DEFAULT, default="Россия")
     price = models.PositiveIntegerField("Цена",  null=False, default=0)
     publication_date = models.TimeField('Дата публикации', auto_now=True)
+    status = models.BooleanField("Статус продажи(Продано?)", default=False)
     moderated = models.BooleanField('Модерация', default=True)
+
+    def get_image_200x200(self):
+        return get_thumbnail(self.image, '200x200', crop='center')
 
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
         return reverse("ad_detail", kwargs={"pk": self.pk, 'category': self.category.slug, 'city': self.city.slug})
+
+class EmailMessage(models.Model):
+    """Модель для отправки сообщений на почту"""
+    email = models.EmailField('Почта(отправителя)')
+    message = models.CharField('Сообщение', max_length=500)
 
