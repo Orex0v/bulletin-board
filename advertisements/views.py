@@ -5,6 +5,7 @@ from django.views.generic import ListView, DetailView, FormView, CreateView, Upd
 
 from .forms import AddPost, SendMailForm
 from .models import Ad
+from .task import send_verification_email
 
 
 class AdList(ListView):
@@ -39,8 +40,10 @@ class AdDetail(FormView, DetailView):
     success_url = "/"
 
     def form_valid(self, form):
+        email = form.cleaned_data.get("email")
+        message = form.cleaned_data.get("message")
+        send_verification_email.delay(email, message)
         form.save()
-        print(form)
         return super().form_valid(form)
 
 

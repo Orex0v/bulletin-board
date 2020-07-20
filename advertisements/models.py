@@ -33,7 +33,7 @@ class Ad(models.Model):
     image = models.ImageField('Фото', upload_to='images/', null=True)
     category = models.ForeignKey(Category, verbose_name="Категория", on_delete=models.SET_NULL, null=True)
     city = models.ForeignKey(City, on_delete=models.SET_DEFAULT, default="Россия")
-    price = models.PositiveIntegerField("Цена",  null=False, default=0)
+    price = models.PositiveIntegerField("Цена", null=False, default=0)
     publication_date = models.TimeField('Дата публикации', auto_now=True)
     status = models.BooleanField("Статус продажи(Продано?)", default=False)
     moderated = models.BooleanField('Модерация', default=True)
@@ -47,8 +47,11 @@ class Ad(models.Model):
     def get_absolute_url(self):
         return reverse("ad_detail", kwargs={"pk": self.pk, 'category': self.category.slug, 'city': self.city.slug})
 
+
 class EmailMessage(models.Model):
     """Модель для отправки сообщений на почту"""
-    email = models.EmailField('Почта(отправителя)')
+    email = models.CharField('Почта(отправителя)', max_length=500)
     message = models.CharField('Сообщение', max_length=500)
 
+    def __str__(self):
+        return self.message
