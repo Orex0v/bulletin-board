@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'easy_thumbnails',
     'mptt',
     'ckeditor',
-    'ckeditor_uploader'
+    'ckeditor_uploader',
+    'django_filters',
 
 
 ]

@@ -1,0 +1,45 @@
+<div id="hero-area">
+<div class="overlay"></div>
+<div class="container">
+<div class="row justify-content-center">
+<div class="col-md-12 col-lg-9 col-xs-12 text-center">
+<div class="contents">
+<h1 class="head-title">Добро пожаловать на  <span class="year">Nexus plus </span></h1>
+<p>Cвежие объявления частных лиц о продаже и покупке товаров всех категорий По России.</p>
+<div class="search-bar">
+<div class="search-inner">
+<form class="search-form" action="{% url 'search_results' %}">
+<div class="form-group">
+<input type="text" name="title" class="form-control" placeholder="Что ищем?">
+</div>
+<div class="form-group inputwithicon">
+<div class="select">
+<select name="city">
+            <option disabled selected value>Город</option>
+    {% for city in city%}
+<option value="{{city.id}}">{{ city.name }}</option>
+    {% endfor %}
+</select>
+</div>
+<i class="lni-target"></i>
+</div>
+<div class="form-group inputwithicon">
+<div class="select">
+<select name="category">
+        <option disabled selected value>Категория</option>
+    {% for category in category %}
+<option value="{{category.id}}">{{ category.title }}</option>
+    {% endfor %}
+</select>
+</div>
+<i class="lni-menu"></i>
+</div>
+<button class="btn btn-common" type="submit"><i class="lni-search"></i> Search Now</button>
+</form>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>

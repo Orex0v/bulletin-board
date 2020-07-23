@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
-{% load static thumbnail %}
+{% load static thumbnail advertisements_tags %}
 {% block content %}
-    {% include 'base/search_block.html' %}
+{% get_search_form %}
 
 <div class="container">
 

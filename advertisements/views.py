@@ -2,7 +2,9 @@ from django.db.models import Q
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView
+from django_filters.views import FilterView
 
+from .filters import AdFilter
 from .forms import AddPost, SendMailForm
 from .models import Ad
 from .task import send_verification_email
@@ -47,17 +49,15 @@ class AdDetail(FormView, DetailView):
         return super().form_valid(form)
 
 
-class SearchResultsView(ListView):
+class SearchResultsView(FilterView):
     model = Ad
     template_name = 'ad/post_list.html'
+    filterset_class = AdFilter
 
-    def get_queryset(self):
-        query = self.request.GET.get('q')
-        object_list = Ad.objects.filter(
-            Q(title__icontains=query) | Q(description__icontains=query),
-            moderated=True, status=False
-        )
-        return object_list
+    # def get_queryset(self):
+    #     # query = self.request.GET.get('q')
+    #     object_list = filter
+    #     return object_list
 
 
 class NewPostView(CreateView):
