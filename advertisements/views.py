@@ -1,13 +1,11 @@
-from django.db.models import Q
 from django.http import HttpResponse, Http404
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, FormView, CreateView, UpdateView
 from django_filters.views import FilterView
 
 from .filters import AdFilter
-from .forms import AddPost, SendMailForm
+from .forms import AddPost
 from .models import Ad
-from .task import send_verification_email
 
 
 class AdList(ListView):
@@ -34,30 +32,16 @@ class UserAdList(ListView):
         return queryset
 
 
-class AdDetail(FormView, DetailView):
+class AdDetail(DetailView):
     model = Ad
     template_name = 'ad/detail.html'
     slug_field = 'id'
-    form_class = SendMailForm
-    success_url = "/"
-
-    def form_valid(self, form):
-        email = form.cleaned_data.get("email")
-        message = form.cleaned_data.get("message")
-        send_verification_email.delay(email, message)
-        form.save()
-        return super().form_valid(form)
 
 
 class SearchResultsView(FilterView):
     model = Ad
     template_name = 'ad/post_list.html'
     filterset_class = AdFilter
-
-    # def get_queryset(self):
-    #     # query = self.request.GET.get('q')
-    #     object_list = filter
-    #     return object_list
 
 
 class NewPostView(CreateView):

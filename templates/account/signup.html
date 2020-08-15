@@ -31,20 +31,26 @@
         <h3>
           Регистрация
         </h3>
-        <form class="login-form" id="signup_form" method="post" action="{% url 'account_signup' %}">
+        <form class="login-form" id="signup_form" enctype="multipart/form-data" method="post" action="{% url 'account_signup' %}">
         {% csrf_token %}
           <div class="form-group">
             <div class="input-icon">
               <i class="lni-user"></i>
-              <input type="text" id="Name" class="form-control" name="username" placeholder="Логин" minlength="1" maxlength="150" required>
+              <input type="text" id="Name" class="form-control" name="username" placeholder="Псевдоним" minlength="1" maxlength="150" required>
             </div>
           </div>
-<!--          <div class="form-group">-->
-<!--            <div class="input-icon">-->
-<!--              <i class="lni-envelope"></i>-->
-<!--              <input type="email" id="sender-email" class="form-control" name="email" placeholder="Email" required>-->
-<!--            </div>-->
-<!--          </div>-->
+          <div class="form-group">
+            <div class="input-icon">
+              <i class="lni-envelope"></i>
+              <input type="email" id="sender-email" class="form-control" name="email" placeholder="Email" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="input-icon">
+              <i class="lni-phone-handset"></i>
+              <input type="tel"  class="form-control" name="phone" placeholder="Телефон" required>
+            </div>
+          </div>
           <div class="form-group">
             <div class="input-icon">
               <i class="lni-lock"></i>
@@ -55,6 +61,12 @@
             <div class="input-icon">
               <i class="lni-lock"></i>
               <input type="password" class="form-control" name="password2" placeholder="Повторите пароль" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="input-icon">
+              <i class="lni-lock"></i>
+              <input type="file" name="image" accept="image/jpeg,image/png,image/gif">
             </div>
           </div>
           <div class="form-group mb-3">

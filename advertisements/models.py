@@ -3,6 +3,8 @@ from django.db import models
 from django.urls import reverse
 from mptt.models import MPTTModel, TreeForeignKey
 from autoslug import AutoSlugField
+from django.conf import settings
+
 
 
 class Category(MPTTModel):
@@ -29,10 +31,10 @@ class Ad(models.Model):
     """Модель обьявления о продаже"""
     title = models.CharField('Заголовок', max_length=100, null=False)
     description = models.TextField('Описание', null=True)
-    author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Автор')
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Автор')
     image = models.ImageField('Фото', upload_to='images/', null=True)
     category = models.ForeignKey(Category, verbose_name="Категория", on_delete=models.SET_NULL, null=True)
-    city = models.ForeignKey(City, on_delete=models.SET_DEFAULT, default="Россия")
+    city = models.ForeignKey(City, on_delete=models.SET_DEFAULT, default=None)
     price = models.PositiveIntegerField("Цена", null=False, default=0)
     publication_date = models.TimeField('Дата публикации', auto_now=True)
     status = models.BooleanField("Статус продажи(Продано?)", default=False)

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
 
     'advertisements',
+    'users.apps.UsersConfig',
 
     'allauth',
     'allauth.account',
@@ -51,7 +52,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'ckeditor_uploader',
     'django_filters',
-
+    'phone_field',
 
 ]
 
@@ -126,6 +127,7 @@ THUMBNAIL_ALIASES = {
     '': {
         'ad_preview': {'size': (350, 225), 'crop': True},
         'ad_detail': {'size': (720, 450), 'crop': True},
+        'user_avatar': {'size': (72, 72), 'crop': True},
     },
 }
 
@@ -153,9 +155,15 @@ USE_L10N = True
 
 USE_TZ = True
 
+AUTH_USER_MODEL = 'users.CustomUser'
+ACCOUNT_FORMS = {'signup': 'users.forms.MyCustomSignupForm'}
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
+
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')

@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Ad, EmailMessage
+from .models import Ad
 
 
 class AddPost(forms.ModelForm):
@@ -8,12 +8,5 @@ class AddPost(forms.ModelForm):
 
     class Meta:
         model = Ad
-        fields = ('title', 'description', 'image', 'category', 'city', 'price')
+        fields = ('title', 'description', 'image', 'category', 'city', 'price', 'status')
 
-
-class SendMailForm(forms.ModelForm):
-    """Форма для отправки сообщений на почту"""
-
-    class Meta:
-        model = EmailMessage
-        fields = ('email', 'message')
