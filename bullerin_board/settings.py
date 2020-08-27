@@ -157,6 +157,8 @@ USE_TZ = True
 
 AUTH_USER_MODEL = 'users.CustomUser'
 ACCOUNT_FORMS = {'signup': 'users.forms.MyCustomSignupForm'}
+ACCOUNT_ADAPTER = 'users.adapter.MyCoolAdapter'
+
 
 
 ACCOUNT_EMAIL_REQUIRED = True
